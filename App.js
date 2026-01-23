@@ -648,6 +648,16 @@ export default function App() {
     }
   };
 
+
+  useEffect(() => {
+    const signIn = async () => {
+      const userCredential = await signInAnonymously(auth);
+      setUserId(userCredential.user.uid);
+    };
+    signIn();
+  }, []);
+
+  /* 
   useEffect(() => {
     const init = async () => {
       const fixedId = await generateUniqueId(); // <-- await it
@@ -655,6 +665,7 @@ export default function App() {
     };
     init();
   }, []);
+  */
 
   // CREATES UNIQUE ID
   const createUniquePageId = () => `page-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
