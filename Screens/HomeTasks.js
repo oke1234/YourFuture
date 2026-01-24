@@ -193,9 +193,21 @@ export default function HomeTasks({
                   subtitle={task.desc}
                   subtasks={task.subtasks}
                   onToggle={() => toggleCheckTask(originalIndex)}
-                  onToggleSubtask={() => {}}
-                  onPress={() => {}}
-                  onPressSubtask={() => {}}
+                  onToggleSubtask={(subIdx) => updateSubtaskChecked(originalIndex, subIdx)}
+                  onDeleteSubtask={(subIdx) => deleteSubtask(originalIndex, subIdx)}
+                  onPress={() => {
+                  setSelectedTask(originalIndex);
+                  setEditedText(task.text);
+                  setEditedDesc(task.desc);
+                  setCurrentPage('editTask');
+                  }}
+                  onPressSubtask={(subIdx) => {
+                  setSelectedSubtask({ taskIdx: originalIndex, subIdx });
+                  setEditedSubtaskText(task.subtasks[subIdx].text);
+                  setEditedSubtaskDesc(task.subtasks[subIdx].desc || '');
+                  setSubtaskFromTaskModal(false);
+                  setCurrentPage('editSubtask');
+                  }}
                 />
               );
             })}
@@ -204,3 +216,17 @@ export default function HomeTasks({
     </KeyboardAvoidingView>
   );
 }
+
+{/*
+<TaskItem
+  key={originalIndex}
+  text={task.text}
+  checked={true}
+  subtitle={task.desc}
+  subtasks={task.subtasks}
+  onToggle={() => toggleCheckTask(originalIndex)}
+  onToggleSubtask={() => {}}
+  onPress={() => {}}
+  onPressSubtask={() => {}}
+/>
+*/}
