@@ -36,7 +36,8 @@ export default function TargetScreen({
             onEditGoalPage={() => handleEditGoal(index)}
             goalDates={goal.dates}
             onDeleteGoal={() => {
-              setGoals(prev => prev.filter((_, idx) => idx !== index));
+            const updated = goals.filter((_, idx) => idx !== index);
+            setGoals(updated); // now a plain array
             }}
             setGoalDates={(newDates) => {
               const updated = [...goals];

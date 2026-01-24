@@ -340,45 +340,75 @@ export default function App() {
   // ⬇️ VOEG DIT TOE ⬇️
   // ==================== LOAD GOALS FROM FIREBASE ====================
   useEffect(() => {
-    if (!userId) return;
-    
-    const loadGoalsFromFirebase = async () => {
-      try {
-        const snapshot = await get(ref(db, `users/${userId}/goals`));
-          if (snapshot.exists()) {
-            const data = snapshot.val();
-            const loadedGoals = Array.isArray(data)
-              ? data.map(g => ({ ...g, dates: g.dates || [], weeks: g.weeks || [] }))
-              : Object.values(data).map(g => ({ ...g, dates: g.dates || [], weeks: g.weeks || [] }));
-            setGoals(loadedGoals);
-        } else {
-          // Alleen als er GEEN goals zijn, gebruik de default
-          console.log("ℹ️ No goals found, using default Workout goal");
-          const defaultGoals = [
-            {
-              title: 'Workout',
-              daysPerWeek: 1,
-              streakNumber: 0,
-              Currentstreak: '0',
-              longeststreak: '0 days',
-              consistency: '0%',
-              weekStreak: 0,
-              weekConsistency: '0%',
-              workoutCompleted: false,
-              dates: [],
-              weeks: [],
-            },
-          ];
-          setGoals(defaultGoals);
-          // Save default to Firebase
-          await set(ref(db, `users/${userId}/goals`), defaultGoals);
-        }
-      } catch (err) {
-        console.error("❌ Error loading goals from Firebase:", err);
-      }
-    };
+  if (!userId) return;
 
-    loadGoalsFromFirebase();
+
+  const loadGoalsFromFirebase = async () => {
+  try {
+  const snapshot = await get(ref(db, `users/${userId}/goals`));
+
+
+  if (snapshot.exists()) {
+  const data = snapshot.val();
+  const loadedGoals = Array.isArray(data)
+  ? data.map(g => ({
+  ...g,
+  daysPerWeek: Number(g.daysPerWeek) || 0,
+  streakNumber: Number(g.streakNumber) || 0,
+  weekStreak: Number(g.weekStreak) || 0,
+  dates: g.dates || [],
+  weeks: g.weeks || [],
+  }))
+  : Object.values(data).map(g => ({
+  ...g,
+  daysPerWeek: Number(g.daysPerWeek) || 0,
+  streakNumber: Number(g.streakNumber) || 0,
+  weekStreak: Number(g.weekStreak) || 0,
+  dates: g.dates || [],
+  weeks: g.weeks || [],
+  }));
+  setGoals(loadedGoals);
+  } else {
+  // VERY FIRST APP START → only add default once
+  const firstLaunchFlag = await AsyncStorage.getItem("FIRST_LAUNCH_DONE");
+
+
+  if (!firstLaunchFlag) {
+  const defaultGoals = [
+  {
+  title: 'Workout',
+  daysPerWeek: 1,
+  streakNumber: 0,
+  Currentstreak: '0',
+  longeststreak: '0 days',
+  consistency: '0%',
+  weekStreak: 0,
+  weekConsistency: '0%',
+  workoutCompleted: false,
+  dates: [],
+  weeks: [],
+  },
+  ];
+
+
+  setGoals(defaultGoals);
+  await set(ref(db, `users/${userId}/goals`), defaultGoals);
+
+
+  // Mark that first launch default has been done
+  await AsyncStorage.setItem("FIRST_LAUNCH_DONE", "true");
+  } else {
+  // User has intentionally no goals → stay empty
+  setGoals([]);
+  }
+  }
+  } catch (err) {
+  console.error("❌ Error loading goals from Firebase:", err);
+  }
+  };
+
+
+  loadGoalsFromFirebase();
   }, [userId]);
 
   // ==================== SAVE GOALS TO FIREBASE ====================
@@ -550,9 +580,9 @@ export default function App() {
         name: userName || existingUser.name || `User${Math.floor(10000000 + Math.random() * 90000000)}`,
         bio: userBio || existingUser.bio || "This is my bio.",
         streak_days: goals.reduce((sum, g) => sum + (g.streakNumber || 0), 0),
-        days_active_per_week: Math.round(
-          goals.reduce((sum, g) => sum + (g.weekStreak || 0), 0) / goals.length
-        ),
+        days_active_per_week: goals.length
+          ? Math.round(goals.reduce((sum, g) => sum + (g.weekStreak || 0), 0) / goals.length)
+          : 0,
         // Only set defaults if they don't exist yet
         Country: existingUser.Country || "NL",
         time_zone: existingUser.time_zone || "CET",
@@ -710,6 +740,18 @@ export default function App() {
     // Voor groepen gebruik bestaande page of genereer nieuwe
     return item.page || `group-${item.id}`;
   }; 
+
+ const updateGoalsInDB = async (updatedGoals) => {
+    if (!userId) return;
+
+    try {
+    await set(ref(db, `users/${userId}/goals`), updatedGoals);
+    setGoals(updatedGoals); // update local state too
+    console.log("✅ Goals updated in Firebase");
+    } catch (err) {
+    console.error("❌ Error updating goals in Firebase:", err);
+    }
+  };
 
   // HANDLE ADDING USER OR GROUP FOR SERVER
   const handleAddUser = async (item) => {
@@ -1191,7 +1233,7 @@ export default function App() {
               expandedGoalIndex={expandedGoalIndex}
               handleGoalPress={handleGoalPress}
               handleEditGoal={handleEditGoal}
-              setGoals={setGoals}
+              setGoals={updateGoalsInDB} // <- use the helper we created
             />
           )}
 
