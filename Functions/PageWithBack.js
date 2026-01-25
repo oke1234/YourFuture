@@ -6,6 +6,8 @@ import {
   ScrollView,
   TextInput,
   Dimensions,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ref, onValue, get, set } from 'firebase/database';
@@ -118,53 +120,61 @@ export default function PageWithBack({
   if (currentPage !== pageName) return null;
 
   return (
-    <View style={{ height: Dimensions.get('window').height - 200, padding: 20 }}>
-      {/* Top row */}
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}>
-        <TouchableOpacity onPress={() => setCurrentPage(archived ? 'archived' : 'people')} style={{ marginRight: 10 }}>
-          <Ionicons name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setProfileChatPage(true)}>
-          <Ionicons name={type === 'group' ? "people-circle" : "person-circle"} size={30} color={currentPage === 'profile' ? '#2772BC' : 'grey'} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setProfileChatPage(true)}>
-          <Text style={{ fontSize: 18, fontWeight: 'bold', marginLeft: 10 }}>{title}</Text>
-        </TouchableOpacity>
-      </View>
+    <KeyboardAvoidingView
+      style={{ height: Dimensions.get('window').height - 200 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 50 : 0}
+    >
+      <View style={{ flex: 1, padding: 20 }}>
+        {/* Top row */}
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}>
+          <TouchableOpacity onPress={() => setCurrentPage(archived ? 'archived' : 'people')} style={{ marginRight: 10 }}>
+            <Ionicons name="arrow-back" size={24} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setProfileChatPage(true)}>
+            <Ionicons name={type === 'group' ? "people-circle" : "person-circle"} size={30} color={currentPage === 'profile' ? '#2772BC' : 'grey'} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setProfileChatPage(true)}>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', marginLeft: 10 }}>{title}</Text>
+          </TouchableOpacity>
+        </View>
 
-      {/* Messages */}
-      <View style={{ flex: 1 }}>
-        <ScrollView
-          style={{ flex: 1, backgroundColor: 'lightgrey', borderRadius: 10 }}
-          contentContainerStyle={{ padding: 20, paddingBottom: 80 }}
-          ref={scrollViewRef}
-          onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}
-        >
-          {messages.length === 0 ? (
-            <Text style={{ color: 'grey', textAlign: 'center', marginTop: 20 }}>No messages yet</Text>
-          ) : (
-            messages.map((msg) => (
-              <View key={msg._id} style={{ marginBottom: 10 }}>
-                <Text style={{ fontWeight: 'bold' }}>{msg.senderName}</Text>
-                <Text>{msg.text}</Text>
-              </View>
-            ))
-          )}
-        </ScrollView>
-      </View>
+        {/* Messages */}
+        <View style={{ flex: 1 }}>
+          <ScrollView
+            style={{ flex: 1, backgroundColor: 'lightgrey', borderRadius: 10 }}
+            contentContainerStyle={{ padding: 20, paddingBottom: 20 }}
+            ref={scrollViewRef}
+            onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}
+          >
+            {messages.length === 0 ? (
+              <Text style={{ color: 'grey', textAlign: 'center', marginTop: 20 }}>No messages yet</Text>
+            ) : (
+              messages.map((msg) => (
+                <View key={msg._id} style={{ marginBottom: 10 }}>
+                  <Text style={{ fontWeight: 'bold' }}>{msg.senderName}</Text>
+                  <Text>{msg.text}</Text>
+                </View>
+              ))
+            )}
+          </ScrollView>
+        </View>
 
-      {/* Input */}
-      <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 10, borderColor: '#ccc', backgroundColor: 'white' }}>
-        <TextInput
-          placeholder="Shoot a text"
-          value={inputText}
-          onChangeText={setInputText}
-          style={{ flex: 1, height: 40, borderWidth: 1, borderColor: '#ccc', borderRadius: 10, paddingHorizontal: 10, backgroundColor: 'white' }}
-        />
-        <TouchableOpacity onPress={sendMessage} style={{ marginLeft: 10 }}>
-          <Ionicons name="send" size={24} color="black" />
-        </TouchableOpacity>
+        {/* Input */}
+        <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 10, borderColor: '#ccc', backgroundColor: 'white' }}>
+          <TextInput
+            placeholder="Shoot a text"
+            value={inputText}
+            onChangeText={setInputText}
+            style={{ flex: 1, height: 40, borderWidth: 1, borderColor: '#ccc', borderRadius: 10, paddingHorizontal: 10, backgroundColor: 'white' }}
+            onSubmitEditing={sendMessage}
+            returnKeyType="send"
+          />
+          <TouchableOpacity onPress={sendMessage} style={{ marginLeft: 10 }}>
+            <Ionicons name="send" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
