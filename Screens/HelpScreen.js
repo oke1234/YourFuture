@@ -28,7 +28,7 @@ export default function HelpScreen() {
         >
           <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16 }}>Tasks</Text>
           <Text style={{ color: 'white', marginTop: 5 }}>
-            Create tasks on the main screen. Tap to add details or subtasks.
+            Create tasks using the plus icon on the top right on the main screen. Tap to add details or subtasks.
           </Text>
         </View>
 
@@ -43,7 +43,7 @@ export default function HelpScreen() {
         >
           <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16 }}>Navigation</Text>
           <Text style={{ color: 'white', marginTop: 5 }}>
-            Use the menu to switch pages. Archived tasks are under "Archived".
+            Use the bottom menu to switch pages.
           </Text>
         </View>
       </ScrollView>

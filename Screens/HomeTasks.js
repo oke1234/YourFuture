@@ -217,6 +217,7 @@ export default function HomeTasks({
                 <TaskItem
                   key={originalIndex}
                   text={task.text}
+                  getGoalColor={getGoalColor}  // ← ADD THIS
                   checked={true}
                   subtitle={task.desc}
                   subtasks={task.subtasks}
