@@ -1,55 +1,37 @@
 {
   "cli": {
-    "version": ">= 16.28.0",
+    "version": ">=16.31.0",
     "appVersionSource": "remote"
   },
   "build": {
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "ios": {
-        "simulator": true
-      }
+      "ios": { "simulator": true }
     },
     "preview": {
       "distribution": "internal",
-      "ios": {
-        "simulator": false
-      }
+      "ios": { "simulator": false }
     },
     "production": {
       "autoIncrement": true,
       "distribution": "store",
-      "ios": {
-        "buildType": "app-store"
-      },
-      "android": {
-        "buildType": "app-bundle"
-      },
       "env": {
-        "EXPO_PUBLIC_FIREBASE_API_KEY": "$FIREBASE_API_KEY",
-        "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "$FIREBASE_AUTH_DOMAIN",
-        "EXPO_PUBLIC_FIREBASE_DATABASE_URL": "$FIREBASE_DATABASE_URL",
-        "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "$FIREBASE_PROJECT_ID",
-        "EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET": "$FIREBASE_STORAGE_BUCKET",
-        "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "$FIREBASE_MESSAGING_SENDER_ID",
-        "EXPO_PUBLIC_FIREBASE_APP_ID": "$FIREBASE_APP_ID",
-        "EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID": "$FIREBASE_MEASUREMENT_ID"
-      }
+        "EXPO_PUBLIC_FIREBASE_API_KEY": "AIzaSyBCVfUpTplRIqiLAcgHrc5VVA7LO6T_Bbc",
+        "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "messages1-fb178.firebaseapp.com",
+        "EXPO_PUBLIC_FIREBASE_DATABASE_URL": "https://messages1-fb178-default-rtdb.europe-west1.firebasedatabase.app",
+        "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "messages1-fb178",
+        "EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET": "messages1-fb178.firebasestorage.app",
+        "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "714454103672",
+        "EXPO_PUBLIC_FIREBASE_APP_ID": "1:714454103672:web:9aa14f39038c7671b01f8d",
+        "EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID": "G-FQN9B0BTME"
+      },
+      "android": { "buildType": "app-bundle" }
     }
   },
   "submit": {
     "production": {
-      "ios": {
-        "appleId": "$APPLE_ID",
-        "appleTeamId": "$APPLE_TEAM_ID",
-        "ascAppId": "$ASC_APP_ID"
-      },
-      "android": {
-        "serviceAccount": "$ANDROID_SERVICE_ACCOUNT",
-        "track": "internal"
-      }
+      "android": { "track": "internal" }
     }
   }
 }
-

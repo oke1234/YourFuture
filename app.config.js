@@ -1,18 +1,11 @@
-export default ({ config }) => ({
-  ...config,
+import 'dotenv/config';
+
+export default {
   name: "Your Future",
   slug: "yourfuture",
   version: "1.0.0",
 
-  plugins: [
-    "./app.plugin.cjs",
-    "expo-font"
-  ],
-
-  icon: "./assets/icons/icon.png", // generiek app icon
-
   ios: {
-    ...config.ios,
     bundleIdentifier: "com.huijsen.yourfuture",
     buildNumber: "1",
     supportsTablet: true,
@@ -34,11 +27,11 @@ export default ({ config }) => ({
       backgroundColor: "#ffffff",
     },
   },
-  
+
   extra: {
-  	eas: {
-    	projectId: "35abaab1-bcbb-4ef8-8502-70193c953994"
-  	},
+    eas: {
+      projectId: "35abaab1-bcbb-4ef8-8502-70193c953994", // hardcoded
+    },
     firebaseConfig: {
       apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
       authDomain: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -50,4 +43,11 @@ export default ({ config }) => ({
       measurementId: process.env.EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID,
     },
   },
-});
+
+  plugins: [
+    "./app.plugin.cjs",
+    "expo-font"
+  ],
+
+  icon: "./assets/icons/icon.png",
+};
