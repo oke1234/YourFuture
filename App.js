@@ -509,6 +509,16 @@ export default function App() {
     return () => clearTimeout(handler); // reset timeout if typing continues
   }, [userName]);
 
+  const handleAddAndMoveWithBioCheck = (user) => {
+    if (!userBio || userBio === 'This is my bio.') {
+      alert('Please add a bio before adding people.');
+      setCurrentPage('profile'); // or whatever page lets them edit bio
+      return;
+    }
+
+    handleAddAndMove(user);
+  };
+
   // MAKES THE ITEMS LOCAL WORK
   const handleAddAndMove = async (item) => {
       const pageName = getPageName(item);
@@ -1245,8 +1255,9 @@ export default function App() {
             filteredList={filteredList}
             suggestions={suggestions}
             expandedTitle={expandedTitle}
+            userBio={userBio}
             onToggle={onToggle}
-            handleAddAndMove={handleAddAndMove}
+            handleAddAndMove={handleAddAndMoveWithBioCheck}
             setCurrentPage={setCurrentPage}
           />
         )}

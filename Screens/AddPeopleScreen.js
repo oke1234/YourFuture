@@ -12,6 +12,7 @@ export default function AddPeopleScreen({
   onToggle,
   handleAddAndMove,
   setCurrentPage,
+  userBio,
 }) {
   return (
     <View style={{ minHeight: Dimensions.get('window').height, flexGrow: 1, padding: 20 }}>
