@@ -2,7 +2,7 @@
   "expo": {
     "name": "Your Future",
     "slug": "yourfuture",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "scheme": "yourfuture",
     "platforms": ["ios", "android", "web"],
     "sdkVersion": "54.0.0",

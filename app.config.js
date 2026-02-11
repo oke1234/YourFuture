@@ -3,7 +3,7 @@ import 'dotenv/config';
 export default {
   name: "Your Future",
   slug: "yourfuture",
-  version: "1.0.0",
+  version: "1.0.1",
 
   ios: {
     bundleIdentifier: "com.huijsen.yourfuture",
