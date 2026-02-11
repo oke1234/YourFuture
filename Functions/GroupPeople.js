@@ -10,6 +10,9 @@ export default function GroupPeople({ setCurrentPage, archived = false, items, s
   const ellipsisRefs = useRef({});
   const [itemToDelete, setItemToDelete] = useState(null);
 
+  const truncate = (text, max = 20) =>
+    text.length > max ? text.slice(0, max) + '…' : text;
+
   // Filters
   const currentGroups = items.filter(
     (i) => i.type === 'group' && i.status === (archived ? 'archived' : 'active')
@@ -62,7 +65,7 @@ export default function GroupPeople({ setCurrentPage, archived = false, items, s
           }}>
           <View style={styles.textbox1}>
             <Ionicons name="people" size={24} color="grey" />
-            <Text style={styles.box1text}>{group.name}</Text>
+            <Text style={styles.box1text}>{truncate(group.name)}</Text>
             <View style={{ flex: 1, alignItems: 'flex-end' }}>
               <TouchableOpacity
                 ref={(ref) => (ellipsisRefs.current[group.page] = ref)}
@@ -102,7 +105,7 @@ export default function GroupPeople({ setCurrentPage, archived = false, items, s
               size={24}
               color="grey"
             />
-            <Text style={styles.box1text}>{person.name}</Text>
+            <Text style={styles.box1text}>{truncate(person.name)}</Text>
             <View style={{ flex: 1, alignItems: 'flex-end' }}>
               <TouchableOpacity
                 ref={(ref) => (ellipsisRefs.current[person.page] = ref)}
